@@ -37,11 +37,15 @@
 
 				<section>
                     <center>
-                        <h1> Motivation</h1>
+                    <h1> Motivation</h1>
+                    <p class="fragment">
+                        <img w idth="75%" src="images/Radulescu_detonation.png">
+                    </p>
+                    <p class="fragment">
                         <img src="images/Tube.png">
-                        <img width="75%" src="images/Radulescu_detonation.png">
                         <font size="1"><br>Adapted from Radulescu, M. I., Sharpe, G. J., Law, C. K., & Lee, J. H. S. (2007). The hydrodynamic structure of unstable cellular detonations. Journal of Mechanics (Vol. 580). <a href="https://doi.org/10.1017/S0022112007005046">https://doi.org/10.1017/S0022112007005046</a>
                         </font>
+                    </p>
                     </center>
                 </section>
 
@@ -53,10 +57,21 @@
                         ![](images/guesswork.png)<!-- .element: class="fragment" data-fragment-index="3" height="200px" -->
                         ![](images/sd2.png)<!-- .element: class="fragment" data-fragment-index="4" height="200px" -->
                         <aside class="notes">
-                            - CSV to Pandas: no more hard-coding
+                            - CSV to Pandas
+                              - Old software had values hard-coded
+                              - New software has more materials to choose from
+                              - Users can add more materials using CSV files
                             - Pint: protect the unit
+                              - Old software relied on the user to be smart with units
                             - Guess less: mixture specific calculations
+                              - Old software used more assumptions for thermodynamic states
+                              - New software uses SD2 and Cantera
                             - SD2: update and deploy
+                              - Original software from Caltech
+                              - Hard to read
+                              - Highly non-PEP 8 compliant
+                              - IMPORTANT: not deployable on pip/conda, relies on user for all dependencies
+                              - Rewrote ~ 1/2 of the package so far, but it's still in work
 	                   </aside>
                     </script>
                 </section>
