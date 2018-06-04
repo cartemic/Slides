@@ -2,7 +2,8 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0,
+        maximum-scale=1.0, user-scalable=no">
 
 		<title>BeaverDet</title>
 
@@ -17,13 +18,15 @@
 			var link = document.createElement( 'link' );
 			link.rel = 'stylesheet';
 			link.type = 'text/css';
-			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			link.href = window.location.search.match( /print-pdf/gi ) ?
+            'css/print/pdf.css' : 'css/print/paper.css';
 			document.getElementsByTagName( 'head' )[0].appendChild( link );
 		</script>
 	</head>
 	<body>
 		<div class="reveal">
 			<div class="slides">
+
 				<section>
                     <center>
                         <h1>BeaverDet</h1>
@@ -31,14 +34,110 @@
                         <h6>Mick Carter</h6>
                     </center>
                 </section>
+
 				<section>
-                    <h1>Motivation</h1>
                     <center>
-                    <img src="images/Tube.png">
-                    <img width="75%" src="images/Radulescu_detonation.png"><br>
-                    <font size="1">Adapted from Radulescu</font>
+                        <h1> Motivation</h1>
+                        <img src="images/Tube.png">
+                        <img width="75%" src="images/Radulescu_detonation.png">
+                        <font size="1"><br>Adapted from Radulescu, M. I., Sharpe, G. J., Law, C. K., & Lee, J. H. S. (2007). The hydrodynamic structure of unstable cellular detonations. Journal of Mechanics (Vol. 580). <a href="https://doi.org/10.1017/S0022112007005046">https://doi.org/10.1017/S0022112007005046</a>
+                        </font>
                     </center>
                 </section>
+
+                <section data-markdown>
+                    <script type="text/template">
+                        # Features
+                        ![](images/pandas.png)<!-- .element: class="fragment" data-fragment-index="1" height="200px" -->
+                        ![](images/pint.png)<!-- .element: class="fragment" data-fragment-index="2" height="200px" -->
+                        ![](images/guesswork.png)<!-- .element: class="fragment" data-fragment-index="3" height="200px" -->
+                        ![](images/sd2.png)<!-- .element: class="fragment" data-fragment-index="4" height="200px" -->
+                        <aside class="notes">
+                            - CSV to Pandas: no more hard-coding
+                            - Pint: protect the unit
+                            - Guess less: mixture specific calculations
+                            - SD2: update and deploy
+	                   </aside>
+                    </script>
+                </section>
+
+                <section>
+                    <section data-markdown>
+                        <script type="text/template">
+                            # Operation
+                            ## 1. Set tube parameters
+                            - Pipe material, size, schedule, and safety factor<!-- .element: class="fragment" data-fragment-index="1" -->
+                            - Window dimensions and safety factor<!-- .element: class="fragment" data-fragment-index="2" -->
+                            - Blockage ratio (BR)<!-- .element: class="fragment" data-fragment-index="3" -->
+                            - Gas mixture<!-- .element: class="fragment" data-fragment-index="4" -->
+                        </script>
+                    </section>
+
+                    <section data-markdown>
+                        <script type="text/template">
+                            # Operation
+                            ## 2. Calculate blockage ratio (BR)
+                            - Blockage diameter<!-- .element: class="fragment" data-fragment-index="1" -->
+                            - Find closest<!-- .element: class="fragment" data-fragment-index="2" -->
+                            - New BR<!-- .element: class="fragment" data-fragment-index="3" -->
+                        </script>
+                    </section>
+
+                    <section data-markdown>
+                        <script type="text/template">
+                            # Operation
+                            ## 3. Calculate run-up distance
+                            - BR < 0.1<!-- .element: class="fragment" data-fragment-index="1" -->
+                            - 0.3 <= BR <= 0.75<!-- .element: class="fragment" data-fragment-index="2" -->
+                            - Interpolation<!-- .element: class="fragment" data-fragment-index="3" -->
+
+                            <font size=1><br>Ciccarelli, G., & Dorofeev, S. (2008). Flame acceleration and transition to detonation in ducts.
+                                Progress in Energy and Combustion Science, 34(4), 499–550. https://doi.org/10.1016/j.pecs.2007.11.002</font>
+                        </script>
+                    </section>
+
+                    <section data-markdown>
+                        <script type="text/template">
+                            # Operation
+                            4. Calculate Chapman-Jouguet (CJ) and reflected shock
+                                states
+                        </script>
+                    </section>
+
+                    <section data-markdown>
+                        <script type="text/template">
+                            # Operation
+                            5. Size flanges based on max pressure
+                        </script>
+                    </section>
+
+                    <section data-markdown>
+                        <script type="text/template">
+                            # Operation
+                            6. Calculate max safe initial pressure
+                        </script>
+                    </section>
+
+                    <section data-markdown>
+                        <script type="text/template">
+                            # Operation
+                            7. Calculate window thickness and safety factor
+                            Calculate min window thickness, discretize, and new
+                            safety factor
+                        </script>
+                    </section>
+
+                    <section data-markdown>
+                        <script type="text/template">
+                            # Operation
+                            8. Calculate bolt/plate safety factors
+                        </script>
+                    </section>
+                </section>
+
+            <section data-markdown>
+                # Results
+            </section>
 			</div>
 		</div>
 
@@ -50,11 +149,31 @@
 			// - https://github.com/hakimel/reveal.js#configuration
 			// - https://github.com/hakimel/reveal.js#dependencies
 			Reveal.initialize({
+                // Use markdown
+                markdown: {
+                    smartypants: true
+                },
+
+                // Hide progress bar
+                progress: false,
+
+                // Show current fragment in URL for convenient refreshing
+                fragments: true,
+                fragmentInURL: true,
+
+                // Remove slide transitions
+                transition: 'none',
+
+                // Push each slide change to the browser history
+	            history: true,
+
+                // Load dependencies
 				dependencies: [
 					{ src: 'plugin/markdown/marked.js' },
 					{ src: 'plugin/markdown/markdown.js' },
 					{ src: 'plugin/notes/notes.js', async: true },
-					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+					{ src: 'plugin/highlight/highlight.js', async: true,
+                    callback: function() { hljs.initHighlightingOnLoad(); } }
 				]
 			});
 		</script>
