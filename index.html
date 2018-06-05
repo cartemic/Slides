@@ -36,52 +36,75 @@
                 </section>
 
 				<section>
-                    <center>
-                    <h1> Motivation</h1>
-                    <p class="fragment">
+                    <section>
+                        <h1>Motivation</h1>
                         <img w idth="75%" src="images/Radulescu_detonation.png">
-                    </p>
-                    <p class="fragment">
-                        <img src="images/Tube.png">
                         <font size="1"><br>Adapted from Radulescu, M. I., Sharpe, G. J., Law, C. K., & Lee, J. H. S. (2007). The hydrodynamic structure of unstable cellular detonations. Journal of Mechanics (Vol. 580). <a href="https://doi.org/10.1017/S0022112007005046">https://doi.org/10.1017/S0022112007005046</a>
                         </font>
-                    </p>
-                    </center>
+                    </section>
+                    <section>
+                        <h1>Motivation</h1>
+                        <img src="images/Tube.png">
+                    </section>
+                    <section>
+                        <h1>Motivation</h1>
+                        <img src="images/DDT.png">
+                    </section>
+                    <section>
+                        <h1>Motivation</h1>
+                        <img src="images/Viewing.png">
+                    </section>
+                    <section>
+                        <h1>Motivation</h1>
+                        <img src="images/Reflection.png">
+                    </section>
                 </section>
 
-                <section data-markdown>
+                <section data-markdown data-separator="^\n\n\n" data-separator-vertical="^\n\n" data-separator-notes="^Note:">
                     <script type="text/template">
                         # Features
                         ![](images/pandas.png)<!-- .element: class="fragment" data-fragment-index="1" height="200px" -->
                         ![](images/pint.png)<!-- .element: class="fragment" data-fragment-index="2" height="200px" -->
                         ![](images/guesswork.png)<!-- .element: class="fragment" data-fragment-index="3" height="200px" -->
                         ![](images/sd2.png)<!-- .element: class="fragment" data-fragment-index="4" height="200px" -->
-                        <aside class="notes">
-                            - CSV to Pandas
-                              - Old software had values hard-coded
-                              - New software has more materials to choose from
-                              - Users can add more materials using CSV files
-                            - Pint: protect the unit
-                              - Old software relied on the user to be smart with units
-                            - Guess less: mixture specific calculations
-                              - Old software used more assumptions for thermodynamic states
-                              - New software uses SD2 and Cantera
-                            - SD2: update and deploy
-                              - Original software from Caltech
-                              - Hard to read
-                              - Highly non-PEP 8 compliant
-                              - IMPORTANT: not deployable on pip/conda, relies on user for all dependencies
-                              - Rewrote ~ 1/2 of the package so far, but it's still in work
-	                   </aside>
+                        Note:
+                        - CSV to Pandas
+                         - Old software had values hard-coded
+                         - New software has more materials to choose from
+                         - Users can add more materials using CSV files
+                        - Pint: protect the unit
+                          - Old software relied on the user to be smart with units
+                        - Guess less: mixture specific calculations
+                          - Old software used more assumptions for thermodynamic states
+                          - New software uses SD2 and Cantera
+                        - SD2: update and deploy
+                          - Original software from Caltech
+                          - Hard to read
+                          - Highly non-PEP 8 compliant
+                          - IMPORTANT: not deployable on pip/conda, relies on user for all dependencies
+                          - Rewrote ~ 3/4 of the package so far, but it's still in work
                     </script>
                 </section>
 
                 <section>
                     <section data-markdown>
                         <script type="text/template">
-                            # Operation
-                            ## 1. Set tube parameters
-                            - Pipe material, size, schedule, and safety factor<!-- .element: class="fragment" data-fragment-index="1" -->
+                            # Using BeaverDet
+                            1. Set tube parameters<!-- .element: class="fragment" data-fragment-index="1" -->
+                            2. Calculate blockage ratio (BR) and diameter<!-- .element: class="fragment" data-fragment-index="2" -->
+                            3. Calculate run-up distance<!-- .element: class="fragment" data-fragment-index="3" -->
+                            4. Calculate Chapman-Jouguet (CJ) and reflected shock states<!-- .element: class="fragment" data-fragment-index="4" -->
+                            5. Size flanges based on max pressure<!-- .element: class="fragment" data-fragment-index="5" -->
+                            6. Calculate max safe initial pressure<!-- .element: class="fragment" data-fragment-index="6" -->
+                            7. Calculate window thickness and safety factor<!-- .element: class="fragment" data-fragment-index="7" -->
+                            8. Calculate bolt and plate safety factors<!-- .element: class="fragment" data-fragment-index="8" -->
+                        </script>
+                    </section>
+
+                    <section data-markdown>
+                        <script type="text/template">
+                            # Tube Parameters
+                            - Pipe material, size, schedule, and safety factor (ASME B31.1)<!-- .element: class="fragment" data-fragment-index="1" -->
                             - Window dimensions and safety factor<!-- .element: class="fragment" data-fragment-index="2" -->
                             - Blockage ratio (BR)<!-- .element: class="fragment" data-fragment-index="3" -->
                             - Gas mixture<!-- .element: class="fragment" data-fragment-index="4" -->
@@ -90,21 +113,40 @@
 
                     <section data-markdown>
                         <script type="text/template">
-                            # Operation
-                            ## 2. Calculate blockage ratio (BR)
-                            - Blockage diameter<!-- .element: class="fragment" data-fragment-index="1" -->
-                            - Find closest<!-- .element: class="fragment" data-fragment-index="2" -->
+                            # Blockages
+                            - Input desired blockage diameter<!-- .element: class="fragment" data-fragment-index="1" -->
+                            - Find closest available<!-- .element: class="fragment" data-fragment-index="2" -->
                             - New BR<!-- .element: class="fragment" data-fragment-index="3" -->
                         </script>
                     </section>
 
                     <section data-markdown>
                         <script type="text/template">
-                            # Operation
-                            ## 3. Calculate run-up distance
-                            - BR < 0.1<!-- .element: class="fragment" data-fragment-index="1" -->
-                            - 0.3 <= BR <= 0.75<!-- .element: class="fragment" data-fragment-index="2" -->
-                            - Interpolation<!-- .element: class="fragment" data-fragment-index="3" -->
+                            # Initial Pressure
+                            - Laminar flamespeed using Cantera<!-- .element: class="fragment" data-fragment-index="1" -->
+                            - CJ and reflected states using SD2<!-- .element: class="fragment" data-fragment-index="2" -->
+                            - Iterate until reflected pressure = max allowable<!-- .element: class="fragment" data-fragment-index="3" -->
+                            - Guess 1 atm, adjust using max / reflected<!-- .element: class="fragment" data-fragment-index="4" -->
+                            - ~3-5 iterations<!-- .element: class="fragment" data-fragment-index="5" -->
+                        </script>
+                    </section>
+
+                    <section data-markdown>
+                        <script type="text/template">
+                            # High Pressure States
+                            - Requires initial pressure<!-- .element: class="fragment" data-fragment-index="1" -->
+                            - `sd2.detonations.calculate_cj_speed()` with `return_state = True`<!-- .element: class="fragment" data-fragment-index="2" -->
+                            - `sd2.shocks.get_reflected_equil_state_0()`<!-- .element: class="fragment" data-fragment-index="3" -->
+                        </script>
+                    </section>
+
+                    <section data-markdown>
+                        <script type="text/template">
+                            # Run-up Distance
+                            - Requires initial pressure<!-- .element: class="fragment" data-fragment-index="1" -->
+                            - BR < 0.1<!-- .element: class="fragment" data-fragment-index="2" -->
+                            - 0.3 <= BR <= 0.75<!-- .element: class="fragment" data-fragment-index="3" -->
+                            - Interpolation<!-- .element: class="fragment" data-fragment-index="4" -->
 
                             <font size=1><br>Ciccarelli, G., & Dorofeev, S. (2008). Flame acceleration and transition to detonation in ducts.
                                 Progress in Energy and Combustion Science, 34(4), 499–550. https://doi.org/10.1016/j.pecs.2007.11.002</font>
@@ -113,45 +155,50 @@
 
                     <section data-markdown>
                         <script type="text/template">
-                            # Operation
-                            4. Calculate Chapman-Jouguet (CJ) and reflected shock
-                                states
+                            # Flanges
+                            - Max P as function of T<!-- .element: class="fragment" data-fragment-index="1" -->
+                            - Lookup from .CSV<!-- .element: class="fragment" data-fragment-index="2" -->
+                            - ASME B16.5 groups 2.1, 2.2, 2.3<!-- .element: class="fragment" data-fragment-index="3" -->
                         </script>
                     </section>
 
                     <section data-markdown>
                         <script type="text/template">
-                            # Operation
-                            5. Size flanges based on max pressure
+                            # Window Calculations
+                            - Given length, width, FS<!-- .element: class="fragment" data-fragment-index="1" -->
+                            - Required thickness<!-- .element: class="fragment" data-fragment-index="2" -->
+                            - Ceiling to nearest<!-- .element: class="fragment" data-fragment-index="3" -->
+                            - Recalculate FS<!-- .element: class="fragment" data-fragment-index="4" -->
                         </script>
                     </section>
 
                     <section data-markdown>
                         <script type="text/template">
-                            # Operation
-                            6. Calculate max safe initial pressure
-                        </script>
-                    </section>
-
-                    <section data-markdown>
-                        <script type="text/template">
-                            # Operation
-                            7. Calculate window thickness and safety factor
-                            Calculate min window thickness, discretize, and new
-                            safety factor
-                        </script>
-                    </section>
-
-                    <section data-markdown>
-                        <script type="text/template">
-                            # Operation
-                            8. Calculate bolt/plate safety factors
+                            # Bolt/Plate
+                            - Thread properties from .CSV (ANSI Inch)<!-- .element: class="fragment" data-fragment-index="1" -->
+                              - Internal<!-- .element: class="fragment" data-fragment-index="1" -->
+                              - External<!-- .element: class="fragment" data-fragment-index="1" -->
+                            - Material properties from .CSV<!-- .element: class="fragment" data-fragment-index="2" -->
+                            - Checks for tensile and shear failure<!-- .element: class="fragment" data-fragment-index="3" -->
+                            - Eqns from Machinery's Handbook<!-- .element: class="fragment" data-fragment-index="4" -->
+                            - Plate checked for pullout<!-- .element: class="fragment" data-fragment-index="5" -->
+                            - Different material properties<!-- .element: class="fragment" data-fragment-index="6" -->
                         </script>
                     </section>
                 </section>
 
             <section data-markdown>
                 # Results
+            </section>
+
+            <section data-markdown>
+                # Future Work
+                - 'Box of tools' is a pain to implement<!-- .element: class="fragment" data-fragment-index="1" -->
+                - Group functions into classes<!-- .element: class="fragment" data-fragment-index="2" -->
+                - Deploy to anaconda cloud<!-- .element: class="fragment" data-fragment-index="3" -->
+                - SD2 speedup using cython<!-- .element: class="fragment" data-fragment-index="4" -->
+                - Test matrix generator<!-- .element: class="fragment" data-fragment-index="5" -->
+                - Schlieren image analysis<!-- .element: class="fragment" data-fragment-index="6" -->
             </section>
 			</div>
 		</div>
