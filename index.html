@@ -41,22 +41,57 @@
                         <img w idth="75%" src="images/Radulescu_detonation.png">
                         <font size="1"><br>Adapted from Radulescu, M. I., Sharpe, G. J., Law, C. K., & Lee, J. H. S. (2007). The hydrodynamic structure of unstable cellular detonations. Journal of Mechanics (Vol. 580). <a href="https://doi.org/10.1017/S0022112007005046">https://doi.org/10.1017/S0022112007005046</a>
                         </font>
+                        <aside class="notes">
+                            <ul>
+                                <li> OVERALL GOAL: enable more efficient combustion through the use of detonation engines
+                                <li> Will be measuring detonation wave properties using schlieren photography
+                                <li> Determining the effect of combustion species on wave structure
+                            </ul>
+                        </aside>
                     </section>
                     <section>
                         <h1>Motivation</h1>
                         <img src="images/Tube.png">
+                        <aside class="notes">
+                            <ul>
+                                <li> This is roughly what the tube will look like
+                                <li> Designing a detonation tube like this takes a considerable amount of time
+                                <li> Lots of parameters to consider, which are dependent on how the gas mixture in the tube detonates
+                            </ul>
+                        </aside>
                     </section>
                     <section>
                         <h1>Motivation</h1>
                         <img src="images/DDT.png">
+                        <aside class="notes">
+                            <ul>
+                                <li> First, a subsonic flame (deflagration) must be convinced to become a detonation
+                                <li> Transition to detonation is enhanced by using periodic blockages
+                                <li> Blockage ratio and run-up distance (discuss later) are important parameters
+                            </ul>
+                        </aside>
                     </section>
                     <section>
                         <h1>Motivation</h1>
                         <img src="images/Viewing.png">
+                        <aside class="notes">
+                            <ul>
+                                <li> For schlieren imaging, a viewing section is needed
+                                <li> Windows must be able to withstand the pressure fluctuations in a detonation wave
+                                <li> Hardware failure, if it occurs, must be predictable and safe, minimizing damage to the tube
+                            </ul>
+                        </aside>
                     </section>
                     <section>
                         <h1>Motivation</h1>
                         <img src="images/Reflection.png">
+                        <aside class="notes">
+                            <ul>
+                                <li> Must account for tube's response to transient presure wave
+                                <li> (based on material properties and physical dimensions)
+                                <li> Reflected shocks further increase the pressure by a factor of ~2.5
+                            </ul>
+                        </aside>
                     </section>
                 </section>
 
@@ -72,6 +107,7 @@
                         ![](images/Sympy.png)<!-- .element: class="fragment" data-fragment-index="6" height="200px" -->
 
                         Note:
+                        - Talk about the features of this package
                         - CSV to Pandas
                          - Old software had values hard-coded
                          - New software has more materials to choose from
