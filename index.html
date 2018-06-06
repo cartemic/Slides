@@ -249,10 +249,12 @@
                             ![](images/plate_shear.png)<!-- .element: class="fragment" data-fragment-index="5" width="200px" -->
 
                             Note:
-                            - formulas from Machinery's Handbook, 26th ed.
-                            - bolt area calculations for both greater and less than 100 ksi bolt strength
-                            - bolt thread shear and tensile areas are calculated
-                            - plate thread shear is also calculated
+                            - Properties and dimensions are imported from csv files
+                            - Bolts must be checked for tensile failure
+                            - Thread shear
+                            - And pull-out
+                            - This was done using equations from Machinery's Handbook
+                            - bolts greater and less than 100 ksi bolt strength
                             - minimum engagement length is calculated, and is corrected for material differences between bolt and plate
                         </script>
                     </section>
@@ -265,49 +267,79 @@
                     <section data-markdown data-separator="^\n\n\n" data-separator-vertical="^\n\n" data-separator-notes="^Note:">
                         # Results
                         ![](images/plots/schedule_study.png)<!-- .element: width="800px" -->
+
+                        Note:
+                        Initial pressure vs. schedule makes pretty good sense, but what the hell is happening with double extra heavy?
                     </section>
                     <section data-markdown data-separator="^\n\n\n" data-separator-vertical="^\n\n" data-separator-notes="^Note:">
                         # Results
                         ![](images/plots/schedule_study_QUESTION.png)<!-- .element: width="800px" -->
+
+                        Note:
+                        Took a look at reflection pressure, which should be identically the tube maximum
                     </section>
                     <section data-markdown data-separator="^\n\n\n" data-separator-vertical="^\n\n" data-separator-notes="^Note:">
                         # Results
                         ![](images/plots/schedule_study_max_BAD.png)<!-- .element: width="800px" -->
+
+                        Note:
+                        Obviously something is wrong. What about if we keep the schedule constant and vary the nominal size?
                     </section>
 
                     <section data-markdown data-separator="^\n\n\n" data-separator-vertical="^\n\n" data-separator-notes="^Note:">
                         # Results
                         ![](images/plots/size_study.png)<!-- .element: width="800px" -->
+
+                        Note: Hmm... What's going on here?
                     </section>
                     <section data-markdown data-separator="^\n\n\n" data-separator-vertical="^\n\n" data-separator-notes="^Note:">
                         # Results
                         ![](images/plots/size_study_QUESTION.png)<!-- .element: width="800px" -->
+
+                        Note:
+                        Looking at the reflection pressure again, these values are obviously bad.
                     </section>
                     <section data-markdown data-separator="^\n\n\n" data-separator-vertical="^\n\n" data-separator-notes="^Note:">
                         # Results
                         ![](images/plots/size_study_max_BAD.png)<!-- .element: width="800px" -->
+
+                        Note:
+                        How about initial temperature?
                     </section>
 
                     <section data-markdown data-separator="^\n\n\n" data-separator-vertical="^\n\n" data-separator-notes="^Note:">
                         # Results
                         ![](images/plots/temperature_study.png)<!-- .element: width="800px" -->
+
+                        Note:
+                        Looks nice, except the tube should be weaker at higher temperatures, and the initial pressure should go DOWN
                     </section>
                     <section data-markdown data-separator="^\n\n\n" data-separator-vertical="^\n\n" data-separator-notes="^Note:">
                         # Results
                         ![](images/plots/temperature_study_BAD.png)<!-- .element: width="800px" -->
+
+                        Notes:
+                        so that's messed up too. Let's look at the reflected pressure again.
                     </section>
                     <section data-markdown data-separator="^\n\n\n" data-separator-vertical="^\n\n" data-separator-notes="^Note:">
                         # Results
                         ![](images/plots/temperature_study_max.png)<!-- .element: width="800px" -->
+
+                        Note:
+                        Well that's neat.
+                        This can all be explained by problems with initial pressure estimation, which I'm going to have to take a look at
                     </section>
 
                     <section data-markdown data-separator="^\n\n\n" data-separator-vertical="^\n\n" data-separator-notes="^Note:">
                         # Results
                         ![](images/plots/bolt_study.png)<!-- .element: width="800px" -->
+
+                        Note:
+                        Happily, the hardware safety factors make sense, and if the bolts fail my tube won't be damaged. Yay!
                     </section>
                 </section>
 
-                <section data-markdown>
+                <section data-markdown data-separator="^\n\n\n" data-separator-vertical="^\n\n" data-separator-notes="^Note:">
                     <script type="text/template">
                         # Future Work
                         <font color="#a92020">
@@ -320,6 +352,10 @@
                         - SD2 speedup using cython<!-- .element: class="fragment" data-fragment-index="6" -->
                         - Test matrix generator<!-- .element: class="fragment" data-fragment-index="7" -->
                         - Schlieren image analysis<!-- .element: class="fragment" data-fragment-index="8" -->
+
+                        Note:
+                        - Problems shown in previous slides can all be explained by faulty initial pressure estimation
+                        - Unit testing did not catch this bug -- WIDEN RANGE
                     </script>
                 </section>
 			</div>
