@@ -98,29 +98,29 @@
                 <section data-markdown data-separator="^\n\n\n" data-separator-vertical="^\n\n" data-separator-notes="^Note:">
                     <script type="text/template">
                         # Features
-                        ![](images/pandas.png)<!-- .element: class="fragment" data-fragment-index="1" height="200px" -->
-                        ![](images/pint.png)<!-- .element: class="fragment" data-fragment-index="2" height="200px" -->
-                        ![](images/guesswork.png)<!-- .element: class="fragment" data-fragment-index="3" height="200px" -->
-                        ![](images/sd2.png)<!-- .element: class="fragment" data-fragment-index="4" height="200px" -->
+                        ![](images/pandas.png)<!-- .element: class="fragment" data-fragment-index="1" height="150px" -->
+                        ![](images/pint.png)<!-- .element: class="fragment" data-fragment-index="2" height="150px" -->
+                        ![](images/guesswork.png)<!-- .element: class="fragment" data-fragment-index="3" height="150px" -->
+                        ![](images/sd2.png)<!-- .element: class="fragment" data-fragment-index="4" height="150px" -->
 
-                        ![](images/Numpy.png)<!-- .element: class="fragment" data-fragment-index="5" height="200px" -->
-                        ![](images/Sympy.png)<!-- .element: class="fragment" data-fragment-index="6" height="200px" -->
+                        ![](images/Numpy.png)<!-- .element: class="fragment" data-fragment-index="5" height="150px" -->
+                        ![](images/Sympy.png)<!-- .element: class="fragment" data-fragment-index="6" height="150px" -->
+                        ![](images/cantera.png)<!-- .element: class="fragment" data-fragment-index="7" width="400px" -->
 
                         Note:
                         - Talk about the features of this package
-                        - CSV to Pandas
+                        - Material and hardware properties are imported from CSVs into Pandas dataframes for flexibility and ease of use
                          - Old software had values hard-coded
                          - New software has more materials to choose from
                          - Users can add more materials using CSV files
-                        - Pint: protect the unit
+                        - Pint is used to protect users from unit problems
                           - Old software relied on the user to be smart with units
                         - Guess less: mixture specific calculations
-                          - Old software used more assumptions for thermodynamic states
-                          - New software uses SD2 and Cantera
-                        - SD2: update and deploy
+                          - Old software used more assumptions for thermodynamic states (detonation, reflection)
+                          - New software uses SD2 and Cantera to calculate gas states using the assumption of Equilibrium
+                        - SD2 is a rewritten, conda-deployable version of the Shock and Detonation toolbox
                           - Original software from Caltech
-                          - Hard to read
-                          - Highly non-PEP 8 compliant
+                          - Code was hard to read and highly non-PEP 8 compliant
                           - IMPORTANT: not deployable on pip/conda, relies on user for all dependencies
                           - Rewrote ~ 3/4 of the package so far, but it's still in work
                         - Other dependencies:
