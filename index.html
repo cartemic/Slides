@@ -67,6 +67,7 @@
                         ![](images/pint.png)<!-- .element: class="fragment" data-fragment-index="2" height="200px" -->
                         ![](images/guesswork.png)<!-- .element: class="fragment" data-fragment-index="3" height="200px" -->
                         ![](images/sd2.png)<!-- .element: class="fragment" data-fragment-index="4" height="200px" -->
+
                         Note:
                         - CSV to Pandas
                          - Old software had values hard-coded
@@ -83,6 +84,10 @@
                           - Highly non-PEP 8 compliant
                           - IMPORTANT: not deployable on pip/conda, relies on user for all dependencies
                           - Rewrote ~ 3/4 of the package so far, but it's still in work
+                        - Other dependencies:
+                          - Numpy
+                          - Sympy
+                          - Cantera
                     </script>
                 </section>
 
@@ -92,10 +97,10 @@
                             # Using BeaverDet
                             1. Set tube parameters<!-- .element: class="fragment" data-fragment-index="1" -->
                             2. Calculate blockage ratio (BR) and diameter<!-- .element: class="fragment" data-fragment-index="2" -->
-                            3. Calculate run-up distance<!-- .element: class="fragment" data-fragment-index="3" -->
-                            4. Calculate Chapman-Jouguet (CJ) and reflected shock states<!-- .element: class="fragment" data-fragment-index="4" -->
-                            5. Size flanges based on max pressure<!-- .element: class="fragment" data-fragment-index="5" -->
-                            6. Calculate max safe initial pressure<!-- .element: class="fragment" data-fragment-index="6" -->
+                            3. Calculate max safe initial pressure<!-- .element: class="fragment" data-fragment-index="6" -->
+                            4. Calculate run-up distance<!-- .element: class="fragment" data-fragment-index="3" -->
+                            5. Calculate Chapman-Jouguet (CJ) and reflected shock states<!-- .element: class="fragment" data-fragment-index="4" -->
+                            6. Size flanges based on max pressure<!-- .element: class="fragment" data-fragment-index="5" -->
                             7. Calculate window thickness and safety factor<!-- .element: class="fragment" data-fragment-index="7" -->
                             8. Calculate bolt and plate safety factors<!-- .element: class="fragment" data-fragment-index="8" -->
                         </script>
@@ -104,49 +109,68 @@
                     <section data-markdown>
                         <script type="text/template">
                             # Tube Parameters
-                            - Pipe material, size, schedule, and safety factor (ASME B31.1)<!-- .element: class="fragment" data-fragment-index="1" -->
-                            - Window dimensions and safety factor<!-- .element: class="fragment" data-fragment-index="2" -->
-                            - Blockage ratio (BR)<!-- .element: class="fragment" data-fragment-index="3" -->
-                            - Gas mixture<!-- .element: class="fragment" data-fragment-index="4" -->
+                            - Pipe material, size, schedule, desired safety factor<!-- .element: class="fragment" data-fragment-index="1" -->
+                            - Blockage ratio (BR)<!-- .element: class="fragment" data-fragment-index="2" -->
+                            - Window dimensions and safety factor<!-- .element: class="fragment" data-fragment-index="3" -->
+                            - Window bolt size and number of bolts<!-- .element: class="fragment" data-fragment-index="4" -->
+                            - Gas mixture and state<!-- .element: class="fragment" data-fragment-index="5" -->
                         </script>
                     </section>
 
                     <section data-markdown>
-                        <script type="text/template">
+                        <script type="text/template" data-separator="^\n\n\n" data-separator-vertical="^\n\n" data-separator-notes="^Note:">
                             # Blockages
-                            - Input desired blockage diameter<!-- .element: class="fragment" data-fragment-index="1" -->
-                            - Find closest available<!-- .element: class="fragment" data-fragment-index="2" -->
-                            - New BR<!-- .element: class="fragment" data-fragment-index="3" -->
+                            ![](images/Blockage.png)<!-- .element: class="fragment" data-fragment-index="1" width="400px" -->
+
+                            <p><font color="#a6cee3">**Tube**</font>, <font color="#1f78b4">**Open area**</font>, <font color="#b2df8a">**Blocked area**</font>, <font color="#33a02c">**Previous obstacles**</font></p><!-- .element: class="fragment" data-fragment-index="1" -->
+
+                            Note:
+                            - Spiraled blockage causes flame acceleration, and thus transition to detonation
+                            - Blockage ratio is used to shorten run-up distance
+                            - User inputs desired BR
+                            - Diameter which gives the user's BR is calculated
+                            - Find closest available size
+                            - Calculate new BR
                         </script>
                     </section>
 
                     <section data-markdown>
-                        <script type="text/template">
+                        <script type="text/template" data-separator="^\n\n\n" data-separator-vertical="^\n\n" data-separator-notes="^Note:">
                             # Initial Pressure
                             - Laminar flamespeed using Cantera<!-- .element: class="fragment" data-fragment-index="1" -->
                             - CJ and reflected states using SD2<!-- .element: class="fragment" data-fragment-index="2" -->
                             - Iterate until reflected pressure = max allowable<!-- .element: class="fragment" data-fragment-index="3" -->
-                            - Guess 1 atm, adjust using max / reflected<!-- .element: class="fragment" data-fragment-index="4" -->
-                            - ~3-5 iterations<!-- .element: class="fragment" data-fragment-index="5" -->
+                            - ~3-5 iterations<!-- .element: class="fragment" data-fragment-index="4" -->
+
+                            Note:
+                            - Laminar FS: calculated using cantera's FreeFlame solver
+                            - To get initial pressure, reflected state is iteratively guessed and corrected using rato of (max allowable tube pressure) to (current guess reflected pressure)
                         </script>
                     </section>
 
-                    <section data-markdown>
+                    <section data-markdown data-separator="^\n\n\n" data-separator-vertical="^\n\n" data-separator-notes="^Note:">
                         <script type="text/template">
                             # High Pressure States
                             - Requires initial pressure<!-- .element: class="fragment" data-fragment-index="1" -->
-                            - `sd2.detonations.calculate_cj_speed()` with `return_state = True`<!-- .element: class="fragment" data-fragment-index="2" -->
-                            - `sd2.shocks.get_reflected_equil_state_0()`<!-- .element: class="fragment" data-fragment-index="3" -->
+                            - <!-- .element: class="fragment" data-fragment-index="2" -->`sd2.detonations.calculate_cj_speed()`<!-- .element: class="fragment" data-fragment-index="2" -->
+                            - <!-- .element: class="fragment" data-fragment-index="3" -->`sd2.shocks.get_reflected_equil_state_0()`<!-- .element: class="fragment" data-fragment-index="3" -->
+
+                            Note:
+                            CJ and reflected:
+                             -guess state
+                             - iteratively minimize state property error (perturbed temp, specific volume)
+                             - return wave speed and cantera gas object
                         </script>
                     </section>
 
                     <section data-markdown>
                         <script type="text/template">
                             # Run-up Distance
-                            - Requires initial pressure<!-- .element: class="fragment" data-fragment-index="1" -->
-                            - BR < 0.1<!-- .element: class="fragment" data-fragment-index="2" -->
-                            - 0.3 <= BR <= 0.75<!-- .element: class="fragment" data-fragment-index="3" -->
-                            - Interpolation<!-- .element: class="fragment" data-fragment-index="4" -->
+                            ![](images/Runup.png)<!-- .element: class="fragment" data-fragment-index="1" width="400px" -->
+                            - Requires initial pressure<!-- .element: class="fragment" data-fragment-index="2" -->
+                            - BR < 0.1 (transport model!)<!-- .element: class="fragment" data-fragment-index="3" -->
+                            - 0.3 <= BR <= 0.75<!-- .element: class="fragment" data-fragment-index="4" -->
+                            - Interpolation<!-- .element: class="fragment" data-fragment-index="5" -->
 
                             <font size=1><br>Ciccarelli, G., & Dorofeev, S. (2008). Flame acceleration and transition to detonation in ducts.
                                 Progress in Energy and Combustion Science, 34(4), 499–550. https://doi.org/10.1016/j.pecs.2007.11.002</font>
@@ -156,33 +180,41 @@
                     <section data-markdown>
                         <script type="text/template">
                             # Flanges
-                            - Max P as function of T<!-- .element: class="fragment" data-fragment-index="1" -->
+                            - Max P as function of T: ASME B31.1<!-- .element: class="fragment" data-fragment-index="1" -->
                             - Lookup from .CSV<!-- .element: class="fragment" data-fragment-index="2" -->
                             - ASME B16.5 groups 2.1, 2.2, 2.3<!-- .element: class="fragment" data-fragment-index="3" -->
                         </script>
                     </section>
 
                     <section data-markdown>
-                        <script type="text/template">
+                        <script type="text/template" data-separator="^\n\n\n" data-separator-vertical="^\n\n" data-separator-notes="^Note:">
                             # Window Calculations
-                            - Given length, width, FS<!-- .element: class="fragment" data-fragment-index="1" -->
-                            - Required thickness<!-- .element: class="fragment" data-fragment-index="2" -->
-                            - Ceiling to nearest<!-- .element: class="fragment" data-fragment-index="3" -->
-                            - Recalculate FS<!-- .element: class="fragment" data-fragment-index="4" -->
+                            ![](images/Window.png)<!-- .element: class="fragment" data-fragment-index="1" height="400px" -->
+
+                            Note:
+                            - User inputs length, width, and factor of safety
+                            - Calculate required thickness for desired FS
+                            - Ceiling to nearest available size (manufacturer dependent)
+                            - Recalculate FS based on available thickness
                         </script>
                     </section>
 
                     <section data-markdown>
-                        <script type="text/template">
+                        <script type="text/template" data-separator="^\n\n\n" data-separator-vertical="^\n\n" data-separator-notes="^Note:">
                             # Bolt/Plate
                             - Thread properties from .CSV (ANSI Inch)<!-- .element: class="fragment" data-fragment-index="1" -->
-                              - Internal<!-- .element: class="fragment" data-fragment-index="1" -->
-                              - External<!-- .element: class="fragment" data-fragment-index="1" -->
                             - Material properties from .CSV<!-- .element: class="fragment" data-fragment-index="2" -->
-                            - Checks for tensile and shear failure<!-- .element: class="fragment" data-fragment-index="3" -->
-                            - Eqns from Machinery's Handbook<!-- .element: class="fragment" data-fragment-index="4" -->
-                            - Plate checked for pullout<!-- .element: class="fragment" data-fragment-index="5" -->
-                            - Different material properties<!-- .element: class="fragment" data-fragment-index="6" -->
+
+                            ![](images/bolt_tension.png)<!-- .element: class="fragment" data-fragment-index="3" width="200px" -->
+                            ![](images/bolt_shear.png)<!-- .element: class="fragment" data-fragment-index="4" width="200px" -->
+                            ![](images/plate_shear.png)<!-- .element: class="fragment" data-fragment-index="5" width="200px" -->
+
+                            Note:
+                            - formulas from Machinery's Handbook, 26th ed.
+                            - bolt area calculations for both greater and less than 100 ksi bolt strength
+                            - bolt thread shear and tensile areas are calculated
+                            - plate thread shear is also calculated
+                            - minimum engagement length is calculated, and is corrected for material differences between bolt and plate
                         </script>
                     </section>
                 </section>
@@ -192,13 +224,16 @@
             </section>
 
             <section data-markdown>
-                # Future Work
-                - 'Box of tools' is a pain to implement<!-- .element: class="fragment" data-fragment-index="1" -->
-                - Group functions into classes<!-- .element: class="fragment" data-fragment-index="2" -->
-                - Deploy to anaconda cloud<!-- .element: class="fragment" data-fragment-index="3" -->
-                - SD2 speedup using cython<!-- .element: class="fragment" data-fragment-index="4" -->
-                - Test matrix generator<!-- .element: class="fragment" data-fragment-index="5" -->
-                - Schlieren image analysis<!-- .element: class="fragment" data-fragment-index="6" -->
+                <script type="text/template">
+                    # Future Work
+                    - Documentation<!-- .element: class="fragment" data-fragment-index="1" -->
+                    - 'Box of tools' is a pain to implement!<!-- .element: class="fragment" data-fragment-index="2" -->
+                    - Group functions into classes<!-- .element: class="fragment" data-fragment-index="3" -->
+                    - Deploy to anaconda cloud<!-- .element: class="fragment" data-fragment-index="4" -->
+                    - SD2 speedup using cython<!-- .element: class="fragment" data-fragment-index="5" -->
+                    - Test matrix generator<!-- .element: class="fragment" data-fragment-index="6" -->
+                    - Schlieren image analysis<!-- .element: class="fragment" data-fragment-index="7" -->
+                </script>
             </section>
 			</div>
 		</div>
